@@ -1,15 +1,17 @@
 .container {
-    min-height: 100%;
-    display: flex;
-    background-color: #f7f8fc;
-   
-  }
-  .page__wrapper{
+  min-height: 100%;
+  display: flex;
+  background-color: #f7f8fc;
+  font-family: "Golos Text", sans-serif;
+}
+
+.page__wrapper {
+  flex-grow: 1;
+}
+
+@media (max-width: 1300px) {
+  .container {
+    width: fit-content;
     flex-grow: 1;
   }
-  @media (max-width: 1300px) {
-    .container {
-      width: fit-content;
-      flex-grow: 1;
-    }
-  }
+}
