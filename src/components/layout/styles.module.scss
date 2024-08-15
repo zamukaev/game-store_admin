@@ -1,0 +1,15 @@
+.container {
+    min-height: 100%;
+    display: flex;
+    background-color: #f7f8fc;
+   
+  }
+  .page__wrapper{
+    flex-grow: 1;
+  }
+  @media (max-width: 1300px) {
+    .container {
+      width: fit-content;
+      flex-grow: 1;
+    }
+  }
