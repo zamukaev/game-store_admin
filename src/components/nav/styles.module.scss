@@ -1,75 +1,78 @@
 .nav {
-    background-color: #363740;
-    padding-top: 30px;
-    margin-right: 20px;
-    width: 250px;
-    
-    &Item {
-        list-style: none;
-      .link{
-        display: flex;
-        align-items: center;
-        margin-bottom: 0px;
-        cursor: pointer;
-        padding: 18px;
-        padding-right: 60px;
-        transition: all 0.8s;
-        border-left: 3px solid #363740;
-        &:hover {
-            transition: all 0.8s;
-            border-left: 3px solid #dde2ff;
-            background-color: rgba(159, 162, 180, 0.1);
-            svg{
-                fill:#DDE2FF;
-            }
-          }
-      
-          &:hover p {
-            color: #dde2ff;
-          }
-          svg{
-            fill: #9FA2B4;
-          }
-          & p {
-            color: #a4a6b3;
-            margin-left: 25px;
-            transition: all 0.5s;
-          }
-       
-      }
-      .active{
-        transition: all 0.8s;
+  background-color: #363740;
+  padding-top: 30px;
+  margin-right: 20px;
+  width: 250px;
+
+  &Item {
+    list-style: none;
+
+    .link {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0px;
+      cursor: pointer;
+      padding: 18px;
+      padding-right: 60px;
+      transition: all 0.5s;
+      border-left: 3px solid #363740;
+
+      &:hover {
+        transition: all 0.5s;
         border-left: 3px solid #dde2ff;
         background-color: rgba(159, 162, 180, 0.1);
-        
-        svg{
-            fill:#DDE2FF;
+
+        svg {
+          fill: #dde2ff;
         }
-        p {
-            color: #dde2ff;
-         }
+      }
+
+      &:hover p {
+        color: #dde2ff;
+      }
+
+      svg {
+        fill: #9fa2b4;
+      }
+
+      & p {
+        color: #a4a6b3;
+        margin-left: 25px;
+        transition: all 0.5s;
+      }
+    }
+    .active {
+      transition: all 0.8s;
+      border-left: 3px solid #dde2ff;
+      background-color: rgba(159, 162, 180, 0.1);
+
+      svg {
+        fill: #dde2ff;
+      }
+      p {
+        color: #dde2ff;
       }
     }
   }
-  
-  .logo {
-    display: flex;
-    align-items: center;
-    padding-left: 14px;
-    margin-bottom: 50px;
-    cursor: pointer;
-  
-    &:hover p {
-      transition: all 0.5s;
-      color: #c8c9d1;
-    }
-  
-    & p {
-      transition: all 0.5s;
-      color: #a4a6b3;
-      font-size: 19px;
-      font-weight: bold;
-      margin-left: 10px;
-    }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  padding-left: 14px;
+  margin-bottom: 50px;
+  cursor: pointer;
+
+  &:hover p {
+    transition: all 0.5s;
+    color: #c8c9d1;
   }
 
+  & p {
+    transition: all 0.5s;
+    color: #a4a6b3;
+    font-size: 19px;
+    font-weight: bold;
+    margin-left: 10px;
+  }
+}
