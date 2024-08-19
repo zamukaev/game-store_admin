@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-import Logo from "../ui/icons/logo/Logo";
+import Logo from '../ui/icons/logo/Logo';
 
-import { navItems } from "./data";
+import { navItems } from './data';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 const NavItems = () => {
   const [active, setActive] = useState(0);
@@ -25,18 +24,11 @@ const NavItems = () => {
 
       <ul className={styles.navItems}>
         {navItems.map(({ id, link, title, Icon }, index) => (
-          <li
-            key={id}
-            className={styles.navItem}
-            onClick={() => setActiveNavItem(index)}
-          >
+          <li key={id} className={styles.navItem} onClick={() => setActiveNavItem(index)}>
             <Link
               to={`/${link}`}
               key={id}
-              className={`${styles.link} ${
-                index === active ? styles.active : ""
-              }`}
-            >
+              className={`${styles.link} ${index === active ? styles.active : ''}`}>
               {<Icon />}
               <p>{title}</p>
             </Link>
