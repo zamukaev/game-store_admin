@@ -14,13 +14,13 @@ export const PrivateRoutes: FC = () => {
     return (
         <Layout>
             <Routes>
-                <Route path="/admin/home" element={<Home />} />
-                <Route path="/admin/products" element={<Products />} />
-                <Route path="/admin/product/:id" element={<Product />} />
-                <Route path="/admin/hits" element={<Hits />} />
-                <Route path="/admin/promotion" element={<Promotion />} />
-                <Route path="/admin/categories" element={<Categories />} />
-                <Route path="/admin/categories/:id" element={<Category />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/product/:id" element={<Product />} />
+                <Route path="/hits" element={<Hits />} />
+                <Route path="/promotions" element={<Promotion />} />
+                <Route path="/categories" element={<Categories />} />
+                <Route path="/categories/:id" element={<Category />} />
                 <Route path="*" element={<Home />} />
             </Routes>
         </Layout>

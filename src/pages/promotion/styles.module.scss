@@ -1,0 +1,25 @@
+.header__list {
+    border-bottom: 2px solid #dfe0eb;
+    padding-bottom: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr ;
+    .header__item{
+        font-size: 14px;
+        font-weight: 600;
+        color: #9fa2b4;
+    }
+  }
+  
+
+  .addProductBlock {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 20px;
+  }
+  
+  .pagination {
+    margin: 27px 0px;
+    display: flex;
+    justify-content: center;
+  }

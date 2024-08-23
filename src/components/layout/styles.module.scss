@@ -1,12 +1,16 @@
 .container {
   min-height: 100%;
   display: flex;
-  background-color: #f7f8fc;
+  background: #DFE0EB;
   font-family: "Golos Text", sans-serif;
 }
 
 .page__wrapper {
   flex-grow: 1;
+  margin: 35px;
+  padding: 30px;
+  background: #F7F8FC;
+ 
 }
 
 @media (max-width: 1300px) {
