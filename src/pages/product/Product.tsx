@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams, Params } from 'react-router-dom';
+import { Link, useParams, Params, useNavigate } from 'react-router-dom';
 
 import api from '../../shared/api/api';
 
@@ -21,57 +21,94 @@ type FieldType = {
 };
 
 const Product = () => {
-  const { id }: Readonly<Params<string>> = useParams(); // id для нашего будущего массива данных которые нужно будет передавать в index products[id];
-  const [form] = Form.useForm();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
-  const [size, setSize] = useState<SizeType>('large');
-
-  const [fileList, setFileList] = useState([]);
+  const [product, setProduct] = useState<IProduct | null>(null);
+  const [title, setTitle] = useState('');
+  const [price, setPrice] = useState<number>(0);
+  const [oldPrice, setOldPrice] = useState<number | undefined>(undefined);
+  const [category, setCategory] = useState('videocarts');
+  const [isHit, setIsHit] = useState<string>('yes');
+  const [isSale, setIsSale] = useState<string>('yes');
+  const [desc, setDesc] = useState('');
+  const [characteristic, setCharacteristic] = useState('');
+  const [fileList, setFileList] = useState<any[]>([]);
   const [uploading, setUploading] = useState(false);
-  const [product, setProduct] = useState<IProduct>();
-
-  const [category, setCategory] = useState('Видеокарты');
-  const [isHit, setIsHit] = useState('Да');
-  const [isSale, setIsSale] = useState('Да');
-
-  const onFinish: FormProps<FieldType>['onFinish'] = (values: any) => {
-    console.log({
-      title: form.getFieldValue('title'),
-      price: form.getFieldValue('price'),
-      oldPrice: form.getFieldValue('oldPrice'),
-      category: category,
-      isHit: isHit,
-      isSale: isSale,
-    });
-
-    console.log('Success:', values);
-  };
 
   useEffect(() => {
-    const fetchGetProducts = async () => {
+    const fetchProduct = async () => {
       try {
         const response = await api.get(`/product/${id}`);
-        setProduct(response.data);
+        const productData = response.data;
+        setProduct(productData);
+        setTitle(productData.title);
+        setPrice(productData.price);
+        setOldPrice(productData.oldPrice);
+        setCategory(productData.category);
+        setIsHit(productData.hit ? 'yes' : 'no');
+        setIsSale(productData.inStock ? 'yes' : 'no');
+        setDesc(productData.desc);
+        setCharacteristic(productData.characteristic);
+        setFileList(
+          productData.urlImages.map((url, index) => ({
+            uid: index,
+            name: `image-${index}`,
+            status: 'done',
+            url,
+          })),
+        );
       } catch (error) {
-        console.error('Failed to fetch products:', error);
-        message.error('Ошибка при загрузке продуктов');
+        console.error('Failed to fetch product:', error);
+        message.error('Ошибка при загрузке продукта');
       }
     };
 
-    fetchGetProducts();
-  }, []);
-
-  console.log(form.getFieldsValue());
-
-  useEffect(() => {
-    if (product) {
-      form.setFieldsValue({
-        title: product.title,
-        price: product.price,
-        oldPrice: product.oldPrice,
-      });
+    if (id) {
+      fetchProduct();
     }
-  }, [product]);
+  }, [id]);
+
+  const handleSaveChanges = async () => {
+    try {
+      const updatedProduct = {
+        title,
+        price,
+        oldPrice,
+        category,
+        isHit: isHit === 'Да',
+        isSale: isSale === 'Да',
+        desc,
+        characteristic,
+        urlImages: fileList.map((file) => file.url || file.thumbUrl),
+      };
+
+      await api.put(`/editProduct/${id}`, updatedProduct);
+      message.success('Изменения успешно сохранены!');
+    } catch (error) {
+      console.error('Failed to save changes:', error);
+      message.error('Ошибка при сохранении изменений.');
+    }
+  };
+
+  const handleDeleteProduct = async () => {
+    try {
+      await api.delete(`/deleteProduct/${id}`);
+      message.success('Товар успешно удален!');
+      navigate('/admin/products');
+    } catch (error) {
+      console.error('Failed to delete product:', error);
+      message.error('Ошибка при удалении товара.');
+    }
+  };
+
+  const handleFileChange = ({ fileList }: any) => {
+    setFileList(fileList);
+  };
+
+  if (!product) {
+    return <div>Загрузка...</div>;
+  }
 
   const handleUpload = () => {
     setUploading(true);
@@ -79,10 +116,6 @@ const Product = () => {
     setTimeout(() => {
       setUploading(false);
     }, 1000);
-  };
-
-  const handleFileChange = (info) => {
-    setFileList(info.fileList);
   };
 
   return (
@@ -112,37 +145,35 @@ const Product = () => {
       <div className={styles.block__product_information}>
         <div className={styles.block__grid_20}>
           <div className={styles.block__grid_7}>
-            <img className={styles.product__image} src={product?.urlImages[0]} />
+            <img
+              className={styles.product__image}
+              src={product?.urlImages[0]}
+              alt={product?.title}
+            />
           </div>
-
-          <div className={styles.block__grid_13}>
-            <Form form={form} name="basic" onFinish={onFinish}>
-              <div className={styles.block__grid_7}>
-                <Form.Item name="title" className={styles.block__grid_7}>
-                  <Input placeholder="Наименование товара" className={styles.block__grid_7} />
-                </Form.Item>
-              </div>
-
-              <div className={styles.block__grid_2}>
-                <Form.Item name="price" className={styles.block__grid_2}>
-                  <Input
-                    placeholder="Цена"
-                    value={product?.price}
-                    className={styles.block__grid_2}
-                  />
-                </Form.Item>
-              </div>
-
-              <div className={styles.block__grid_2}>
-                <Form.Item name="oldPrice" className={styles.block__grid_2}>
-                  <Input
-                    placeholder="Старая цена"
-                    value={product?.oldPrice}
-                    className={styles.block__grid_2}
-                  />
-                </Form.Item>
-              </div>
-            </Form>
+          <div className={styles.block__grid_7}>
+            <Input
+              placeholder="Наименование товара"
+              className={styles.block__grid_7}
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
+          <div className={styles.block__grid_2}>
+            <Input
+              placeholder="Цена"
+              className={styles.block__grid_1}
+              value={price}
+              onChange={(e) => setPrice(parseFloat(e.target.value))}
+            />
+          </div>
+          <div className={styles.block__grid_2}>
+            <Input
+              placeholder="Старая цена"
+              className={styles.block__grid_1}
+              value={oldPrice}
+              onChange={(e) => setOldPrice(parseFloat(e.target.value))}
+            />
           </div>
         </div>
 
@@ -233,19 +264,44 @@ const Product = () => {
       <div className={styles.textareas}>
         <div className={styles.parent__grid_3}>
           <div className={styles.block__grid_1}>
-            <TextArea rows={4} />
+            <TextArea
+              rows={4}
+              value={desc}
+              onChange={(e) => setDesc(e.target.value)}
+              placeholder="Описание"
+            />
           </div>
           <div className={styles.block__grid_1}>
-            <TextArea rows={4} />
+            <TextArea
+              rows={4}
+              value={characteristic}
+              onChange={(e) => setCharacteristic(e.target.value)}
+              placeholder="Характеристики"
+            />
           </div>
         </div>
       </div>
 
-      <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-        <Button type="primary" htmlType="submit">
-          Сохранить изменения
-        </Button>
-      </Form.Item>
+      <Form style={{ display: 'flex' }}>
+        <Form.Item>
+          <Button
+            onClick={handleSaveChanges}
+            type="primary"
+            htmlType="submit"
+            className={styles.button__save_changes}>
+            Сохранить изменения
+          </Button>
+        </Form.Item>
+        <Form.Item>
+          <Button
+            onClick={handleDeleteProduct}
+            type="primary"
+            htmlType="submit"
+            className={styles.button__delete_good}>
+            Удалить товар
+          </Button>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

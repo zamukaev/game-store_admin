@@ -78,6 +78,7 @@
 .parent__grid_3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
 
 .block__for_description {
@@ -101,6 +102,17 @@
 }
 
 .textareas {
-  margin-left: 1em;
+  margin-left: 20px;
   margin-top: 2em;
+}
+
+.button__save_changes {
+  margin-top: 30px;
+  margin-left: 20px;
+}
+
+.button__delete_good {
+  background: red;
+  margin-top: 30px;
+  margin-left: 20px;
 }
