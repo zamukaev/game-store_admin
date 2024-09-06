@@ -1,11 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+import api from '../../shared/api/api';
 
 import { Button } from 'antd';
 import type { ConfigProviderProps } from 'antd';
+import { message } from 'antd';
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 
 import ProductLine from '../../components/productLine/ProductLine';
+
+import { IProduct } from './mockData';
 
 import styles from './styles.module.scss';
 
@@ -13,6 +18,21 @@ type SizeType = ConfigProviderProps['componentSize'];
 
 const Products = () => {
   const [size, setSize] = useState<SizeType>('large');
+  const [products, setProducts] = useState<IProduct[]>([]);
+
+  useEffect(() => {
+    const fetchGetProducts = async () => {
+      try {
+        const response = await api.get('allProducts');
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Failed to fetch products:', error);
+        message.error('Ошибка при загрузке продуктов');
+      }
+    };
+
+    fetchGetProducts();
+  }, []);
 
   return (
     <div className={styles.block__main}>
@@ -40,11 +60,9 @@ const Products = () => {
           </div>
         </div>
         <div className={styles.block__goods}>
-          {Array(7)
-            .fill(null)
-            .map((_, index) => (
-              <ProductLine key={index} index={index} />
-            ))}
+          {products.map((product, index) => (
+            <ProductLine key={index} index={index} product={product} />
+          ))}
         </div>
       </div>
     </div>
